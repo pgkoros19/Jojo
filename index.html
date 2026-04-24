@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gift Quest Γεωργία 🎁 - Έκδοση Γιορτής</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Verdana, sans-serif;
+    background: linear-gradient(135deg, #f8e1f4, #e0f7fa, #ffd1dc);
+    background-size: 200% 200%;
+    animation: gradientBG 10s ease infinite;
+    text-align: center;
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px;
+    cursor: default;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Background floating particles */
+.particle {
+    position: fixed;
+    z-index: 1;
+    pointer-events: none;
+    animation: floatParticle linear infinite;
+    opacity: 0;
+    user-select: none;
+}
+
+@keyframes floatParticle {
+    0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; }
+    15% { opacity: 1; }
+    85% { opacity: 1; }
+    100% { transform: translateY(-10vh) scale(1.5) rotate(360deg); opacity: 0; }
+}
+
+/* Click Burst Magic */
+.burst-particle {
+    position: absolute;
+    z-index: 9999;
+    pointer-events: none;
+    user-select: none;
+}
+@keyframes burstAnim {
+    0% { transform: scale(0.5) translate(0, 0); opacity: 1; }
+    100% { transform: scale(1.5) translate(var(--tx), var(--ty)); opacity: 0; }
+}
+
+/* Mouse Trail Magic */
+.mouse-trail {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    animation: fadeOutUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    font-size: 16px;
+    transform: translate(-50%, -50%);
+}
+@keyframes fadeOutUp {
+    0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -80px) scale(0.5); }
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    width: 90%;
+    max-width: 720px;
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    position: relative;
+    z-index: 2;
+    transition: transform 0.1s ease-out, opacity 0.4s ease;
+    transform-style: preserve-3d;
+}
+
+@keyframes slideIn {
+    0% { transform: translateX(30px); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+}
+.slide-active {
+    animation: slideIn 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+}
+.shake {
+    animation: shake 0.4s ease-in-out;
+}
+
+.signature {
+    font-size: 18px;
+    color: #e91e63;
+    margin-bottom: 20px;
+    font-weight: bold;
+    transform: translateZ(20px);
+}
+
+.version-tag {
+    background: #ff4f7b;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 14px;
+    vertical-align: middle;
+    margin-left: 10px;
+    box-shadow: 0 2px 5px rgba(233, 30, 99, 0.3);
+}
+
+h2 {
+    color: #333;
+    min-height: 60px;
+    transform: translateZ(30px);
+}
+
+.typing-cursor::after {
+    content: '|';
+    animation: blink 1s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+button {
+    padding: 14px 24px;
+    margin: 10px;
+    border: none;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #ff4f7b, #ff2e63);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+}
+button:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 6px 20px rgba(233, 30, 99, 0.5);
+}
+button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+.answers button {
+    display: block;
+    width: 85%;
+    margin: 12px auto;
+}
+
+#feedback {
+    min-height: 40px;
+    font-weight: bold;
+    margin-top: 15px;
+    font-size: 20px;
+}
+
+.lovebar-wrap {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 25px;
+    margin: 25px 0;
+    overflow: hidden;
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+    border: 1px solid white;
+}
+
+.lovebar {
+    height: 28px;
+    width: 0%;
+    background: linear-gradient(90deg, #ff2e63, #ff8fab, #ff2e63);
+    background-size: 200% 100%;
+    animation: shine 2s linear infinite;
+    transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.searchbar {
+    height: 28px;
+    width: 0%;
+    background: linear-gradient(90deg, #4CAF50, #8BC34A, #4CAF50);
+    background-size: 200% 100%;
+    animation: shine 2s linear infinite;
+    transition: width 0.1s linear;
+}
+
+@keyframes shine {
+    to { background-position: 200% center; }
+}
+
+.percent {
+    font-weight: bold;
+    color: #e91e63;
+    font-size: 18px;
+}
+
+.fadeOut {
+    opacity: 0 !important;
+    transform: scale(0.9) !important;
+}
+
+#final-buttons {
+    display: none;
+    margin-top: 30px;
+    position: relative;
+    min-height: 120px;
+}
+
+#btn-yes {
+    background: linear-gradient(135deg, #4CAF50, #2E7D32);
+    padding: 16px 30px;
+    font-size: 18px;
+    z-index: 10;
+    position: relative;
+    display: block;
+    margin: 0 auto 15px auto;
+}
+
+#btn-hug {
+    background: linear-gradient(135deg, #FF9800, #F57C00);
+    padding: 14px 24px;
+    font-size: 16px;
+    z-index: 10;
+    position: relative;
+    display: block;
+    margin: 0 auto;
+}
+
+#btn-no {
+    position: absolute; 
+    background: #555;
+    padding: 12px 20px;
+    font-size: 16px;
+    z-index: 100;
+    transition: left 0.2s ease, top 0.2s ease;
+}
+
+#content-area {
+    transition: opacity 0.3s ease;
+}
+
+/* Gravity Drop Animation for the bad answer */
+.drop-down {
+    transform: translateY(150vh) rotate(70deg) !important;
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 1.2s cubic-bezier(0.55, 0.085, 0.68, 0.53), opacity 0.8s !important;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container" id="game">
+    <div class="signature" id="signature">
+        🎁 Χρόνια Πολλά Γεωργία! 🎁<br>
+        <span style="font-size:14px; color:#777;">Από τον Πέτρο και τη Χαρά που σε αγαπούν πολύ</span>
+    </div>
+
+    <h2 id="title">Gift Quest Γεωργία <span class="version-tag">Namday Edition</span> ✨</h2>
+
+    <div class="lovebar-wrap">
+        <div class="lovebar" id="lovebar"></div>
+    </div>
+    <div class="percent" id="percent">0% Έτοιμη για το Δώρο</div>
+
+    <div id="content-area">
+        <div id="content">
+            <h3 style="color:#e91e63;">Εντοπίστηκε Εορτάζουσα! 💖</h3>
+            <p style="font-size: 16px; color: #555;">Εκκίνηση πρωτοκόλλου άμεσης παράδοσης δώρου...</p>
+            <button onclick="startGame()">Ξεκίνα το Κουίζ! 🥰</button>
+        </div>
+    </div>
+
+    <div id="feedback"></div>
+</div>
+
+<script>
+let gameStarted = false;
+let audioCtx;
+
+// Παιδικά particles
+const elementsArray = ['✨', '🎁', '🎁', '🎈', '☀️', '🐱', '🐶', '🦄', '🌈'];
+const trailElements = ['✨', '⭐', '🎈'];
+const taunts = ["Πιάσε με!", "Δεν το πατάς!", "Ούτε καν!", "Μπααα", "Χαχα αστόχησες!", "Πιο γρήγορα!", "Όχι!"];
+
+document.addEventListener('mousemove', function(e) {
+    if(Math.random() > 0.6) {
+        let trail = document.createElement('div');
+        trail.className = 'mouse-trail';
+        trail.innerHTML = trailElements[Math.floor(Math.random() * trailElements.length)];
+        trail.style.left = e.pageX + 'px';
+        trail.style.top = e.pageY + 'px';
+        document.body.appendChild(trail);
+        setTimeout(() => trail.remove(), 800);
+    }
+    
+    if (!gameStarted) {
+        const container = document.getElementById('game');
+        if (container.classList.contains('fadeOut')) return;
+        const xAxis = (window.innerWidth / 2 - e.pageX) / 30;
+        const yAxis = (window.innerHeight / 2 - e.pageY) / 30;
+        container.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+    }
+});
+
+document.addEventListener('mouseleave', () => {
+    if (!gameStarted) document.getElementById('game').style.transform = `rotateY(0deg) rotateX(0deg)`;
+});
+
+document.addEventListener('click', function(e) {
+    if (gameStarted && e.target.tagName !== 'BUTTON') {
+        createMiniBurst(e.pageX, e.pageY);
+    }
+});
+
+function createMiniBurst(x, y) {
+    for(let i=0; i<5; i++) {
+        let p = document.createElement("div");
+        p.className = "burst-particle";
+        p.innerHTML = elementsArray[Math.floor(Math.random() * elementsArray.length)];
+        p.style.left = x + "px";
+        p.style.top = y + "px";
+        p.style.fontSize = (12 + Math.random() * 15) + "px";
+        
+        let angle = Math.random() * Math.PI * 2;
+        let distance = 30 + Math.random() * 50;
+        let tx = Math.cos(angle) * distance + "px";
+        let ty = Math.sin(angle) * distance + "px";
+        
+        p.style.setProperty('--tx', tx);
+        p.style.setProperty('--ty', ty);
+        p.style.animation = `burstAnim ${0.5 + Math.random() * 0.5}s ease-out forwards`;
+        
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 1000);
+    }
+}
+
+// ΟΙ ΕΡΩΤΗΣΕΙΣ ΜΕ ΤΑ ΝΕΑ EMOJIS:
+const questions = [
+    {q: "1️⃣ Ποιο όνομα ζώου έχει το αυτοκίνητο του Πέτρου; 🚗", a: ["Λιοντάρι 🦁", "Πάντα 🐼", "Ελέφαντας 🐘", "Γάτα 🐱"], correct: [1]}, // Σωστό: Πάντα
+    {q: "2️⃣ Πόσα Toyota Yaris έχει αλλάξει ο μπαμπάς; 🤔", a: ["1 🚗", "2 🚙", "3 🏎️", "4 🚐"], correct: [2]}, // *** Άλλαξε το [2] αν το 3 δεν είναι η σωστή απάντηση. [0]=1, [1]=2 κτλ.
+    {q: "3️⃣ Τι βάζουμε το καλοκαίρι όταν έχει ήλιο για να βλέπουμε καλά; ☀️", a: ["Σκουφάκι 🧢", "Γυαλιά ηλίου 🕶️", "Κασκόλ 🧣", "Ομπρέλα ☔"], correct: [1]}, // Σωστό: Γυαλιά ηλίου
+    {q: "4️⃣ Ποια μέρα είναι η γιορτή σου; 🎉", a: ["23 Απριλίου 🌸", "15 Αυγούστου 🌊", "25 Δεκεμβρίου 🎄", "28 Οκτωβρίου 🇬🇷"], correct: [0]} // *** Άλλαξε ημερομηνίες και τον δείκτη [0] αν χρειάζεται.
+];
+
+let current = 0;
+let smileLevel = 0;
+const totalSmile = 100;
+const step = totalSmile / questions.length;
+
+function startGame() {
+    gameStarted = true;
+    document.getElementById('game').style.transform = `rotateY(0deg) rotateX(0deg)`; 
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    fadeTransition(() => renderQuestion());
+}
+
+function fadeTransition(callback) {
+    const area = document.getElementById("content-area");
+    area.style.opacity = 0;
+    setTimeout(() => {
+        callback();
+        area.style.opacity = 1;
+    }, 300);
+}
+
+function typeText(element, text, speed, callback) {
+    element.innerHTML = "";
+    element.classList.add("typing-cursor");
+    let i = 0;
+    
+    function typing() {
+        if (i < text.length) {
+            element.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(typing, speed);
+        } else {
+            element.classList.remove("typing-cursor");
+            if (callback) callback();
+        }
+    }
+    typing();
+}
+
+function renderQuestion() {
+    if (current >= questions.length) { finale(); return; }
+    
+    let q = questions[current];
+    document.getElementById("content").innerHTML = ""; 
+    
+    let titleEl = document.getElementById("title");
+    titleEl.classList.remove("slide-active");
+    void titleEl.offsetWidth; 
+    titleEl.classList.add("slide-active");
+
+    typeText(titleEl, q.q, 35, () => {
+        let html = "<div class='answers slide-active'>";
+        q.a.forEach((ans, i) => {
+            html += `<button onclick="checkAnswer(${i})">${ans}</button>`;
+        });
+        html += "</div>";
+        document.getElementById("content").innerHTML = html;
+    });
+}
+
+function checkAnswer(i) {
+    let q = questions[current];
+    let buttons = document.querySelectorAll('.answers button');
+    buttons.forEach(b => b.disabled = true); 
+
+    if (q.correct.includes(i)) {
+        smileLevel += Math.round(step);
+        if (smileLevel > 100 || current === questions.length - 1) smileLevel = 100;
+        updateBar();
+        playTone(600, "sine");
+        playTone(800, "sine", 0.1); 
+        
+        let fb = document.getElementById("feedback");
+        fb.style.color = "#e91e63";
+        fb.innerHTML = "🎁 Μπράβο! Το βρήκες!";
+        showParticles(8); 
+        
+        current++;
+        setTimeout(() => fadeTransition(() => {
+            document.getElementById("feedback").innerHTML = "";
+            renderQuestion();
+        }), 1200);
+
+    } else {
+        playTone(150, "sawtooth");
+        let fb = document.getElementById("feedback");
+        fb.style.color = "#333";
+        fb.innerHTML = "😏 Χμμμ... Ξανασκέψου το!";
+        
+        let gameBox = document.getElementById("game");
+        gameBox.classList.remove("shake");
+        void gameBox.offsetWidth; 
+        gameBox.classList.add("shake");
+        
+        setTimeout(() => {
+            buttons.forEach(b => b.disabled = false);
+        }, 400);
+    }
+}
+
+function updateBar() {
+    document.getElementById("lovebar").style.width = smileLevel + "%";
+    
+    let percentText = document.getElementById("percent");
+    let currentVal = parseInt(percentText.innerText) || 0;
+    
+    let interval = setInterval(() => {
+        if(currentVal >= smileLevel) {
+            clearInterval(interval);
+            percentText.innerText = smileLevel + "% Έτοιμη για το Δώρο";
+        } else {
+            currentVal++;
+            percentText.innerText = currentVal + "% Έτοιμη για το Δώρο";
+        }
+    }, 15);
+}
+
+function playTone(freq, type = "sine", delay = 0) {
+    if (!audioCtx) return;
+    setTimeout(() => {
+        let osc = audioCtx.createOscillator();
+        let gainNode = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        osc.start();
+        gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.3);
+        osc.stop(audioCtx.currentTime + 0.3);
+    }, delay * 1000);
+}
+
+function showParticles(amount) {
+    for (let i = 0; i < amount; i++) {
+        let p = document.createElement("div");
+        p.className = "particle";
+        p.innerHTML = elementsArray[Math.floor(Math.random() * elementsArray.length)];
+        p.style.left = Math.random() * 100 + "vw";
+        p.style.fontSize = (15 + Math.random() * 25) + "px";
+        p.style.animationDuration = (3 + Math.random() * 3) + "s";
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 6000);
+    }
+}
+
+function finale() {
+    const gameBox = document.getElementById("game");
+    gameBox.classList.add("fadeOut");
+
+    setTimeout(() => {
+        document.getElementById("title").innerHTML = "Mission Accomplished! 🚀🎈";
+        document.getElementById("signature").style.display = "none";
+        
+        let finalHtml = 
+        "<div id='final-text' style='margin-top:10px;font-size:22px;font-weight:bold;color:#333;line-height:1.6;min-height:100px;'>Μπράβο Γεωργία! Είσαι πανέξυπνη! 🎉<br>Το δώρο σου είναι πολύ κοντά...</div>"+
+        "<div id='final-buttons'>" +
+        "<button id='btn-yes' onclick='startSearch()'>Πάμε να το βρούμε! 🎁</button>" + 
+        "<button id='btn-hug' onclick='sendHug()'>Στείλε Μια Τεράστια Αγκαλιά 🫂</button>" + 
+        "<button id='btn-no' onmouseover='runAway(this)' ontouchstart='runAway(this)' onclick='runAway(this)'>Δεν θέλω το δώρο ακόμα</button>" +
+        "</div>";
+
+        document.getElementById("content-area").innerHTML = finalHtml;
+        gameBox.classList.remove("fadeOut");
+        showParticles(40); 
+        
+        setTimeout(() => {
+            document.getElementById('final-buttons').style.display = 'block';
+            document.getElementById('final-buttons').classList.add('slide-active');
+            
+            let btnNo = document.getElementById('btn-no');
+            btnNo.style.left = "38%";
+            btnNo.style.top = "10px";
+        }, 300);
+
+    }, 600);
+}
+
+function runAway(btn) {
+    btn.innerHTML = taunts[Math.floor(Math.random() * taunts.length)];
+    const maxX = window.innerWidth - btn.clientWidth - 20;
+    const maxY = window.innerHeight - btn.clientHeight - 20;
+    const randomX = Math.random() * maxX;
+    const randomY = Math.random() * maxY;
+
+    btn.style.position = 'fixed';
+    btn.style.left = `${Math.max(10, randomX)}px`;
+    btn.style.top = `${Math.max(10, randomY)}px`;
+}
+
+function sendHug() {
+    playTone(400, "sine");
+    playTone(500, "sine", 0.1);
+    playTone(600, "sine", 0.2);
+    showParticles(80);
+    let btnHug = document.getElementById("btn-hug");
+    btnHug.innerHTML = "Η αγκαλιά παραδόθηκε! ❤️";
+    btnHug.style.background = "#e91e63";
+    btnHug.disabled = true;
+}
+
+// Η ΝΕΑ ΣΥΝΑΡΤΗΣΗ ΓΙΑ ΤΟ SCANNER
+function startSearch() {
+    // Ήχος έναρξης σκαναρίσματος
+    playTone(300, "square", 0);
+    playTone(400, "square", 0.2);
+    
+    // Αλλάζουμε την οθόνη με τη μπάρα φόρτωσης
+    document.getElementById("content-area").innerHTML = `
+        <h3 style='color:#e91e63;'>Αναζήτηση Δώρου... 🔎</h3>
+        <div class='lovebar-wrap' style='margin: 25px auto; width: 85%; background: rgba(0,0,0,0.1); border: 2px solid #8BC34A;'>
+            <div class='searchbar' id='search-bar'></div>
+        </div>
+        <p id='search-text' style='font-size:20px; font-weight:bold; color:#555;'>Σκανάρισμα κουζίνας... 🍳</p>
+    `;
+
+    let progress = 0;
+    let searchTexts = [
+        "Σκανάρισμα κάτω από το κρεβάτι... 🛏️", 
+        "Ψάξιμο στο σαλόνι... 🛋️", 
+        "Εντοπισμός σήματος δώρου... 📡", 
+        "Βρέθηκε! 🎁"
+    ];
+    let searchBar = document.getElementById('search-bar');
+    let searchText = document.getElementById('search-text');
+
+    let interval = setInterval(() => {
+        progress += 1; 
+        searchBar.style.width = progress + "%";
+        
+        // Αλλαγή κειμένων όσο γεμίζει η μπάρα
+        if (progress === 25) { searchText.innerHTML = searchTexts[0]; playTone(500, "sine", 0); }
+        if (progress === 50) { searchText.innerHTML = searchTexts[1]; playTone(500, "sine", 0); }
+        if (progress === 75) { searchText.innerHTML = searchTexts[2]; playTone(500, "sine", 0); }
+
+        if(progress >= 100) {
+            clearInterval(interval);
+            searchText.innerHTML = searchTexts[3];
+            playTone(800, "sine", 0);
+            playTone(1000, "sine", 0.2);
+            // Μικρή παύση πριν δείξει το μπαλκόνι
+            setTimeout(showBalcony, 800); 
+        }
+    }, 50); // 50ms * 100 = 5 δευτερόλεπτα συνολικά
+}
+
+// Η ΤΕΛΙΚΗ ΟΘΟΝΗ ΜΕ ΤΟ ΜΠΑΛΚΟΝΙ
+function showBalcony() {
+    document.getElementById("content-area").innerHTML = "<h2 style='color:#e91e63; margin-top:0;'>Βρέθηκε! 😍🎁</h2><p style='font-size:26px; font-weight:bold; line-height:1.4;'>Τρέξε γρήγορα στο <span style='color:#FF9800; font-size:32px; text-transform:uppercase;'>Μπαλκόνι</span><br> Εκεί σε περιμένει το δώρο σου! 🌺🌿🌈</p><p style='font-size:16px; color:#555; margin-top:20px;'>(Κάνε κλικ οπουδήποτε στην οθόνη για λίγη ακόμα μαγεία ✨)</p>";
+    document.getElementById("title").innerHTML = "💖🎉";
+    
+    setInterval(() => showParticles(4), 300); 
+}
+
+setInterval(() => {
+    let p = document.createElement("div");
+    p.className = "particle";
+    p.innerHTML = elementsArray[Math.floor(Math.random() * elementsArray.length)];
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.fontSize = (12 + Math.random() * 20) + "px";
+    p.style.animationDuration = "12s";
+    document.body.appendChild(p);
+    
+    setTimeout(() => p.remove(), 12000);
+}, 800);
+</script>
+
+</body>
+</html>
