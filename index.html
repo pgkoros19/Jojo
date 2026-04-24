@@ -354,12 +354,12 @@ function createMiniBurst(x, y) {
     }
 }
 
-// ΟΙ ΕΡΩΤΗΣΕΙΣ ΜΕ ΤΑ ΝΕΑ EMOJIS:
+// ΟΙ ΕΡΩΤΗΣΕΙΣ ΜΕ ΤΑ EMOJIS:
 const questions = [
     {q: "1️⃣ Ποιο όνομα ζώου έχει το αυτοκίνητο του Πέτρου; 🚗", a: ["Λιοντάρι 🦁", "Πάντα 🐼", "Ελέφαντας 🐘", "Γάτα 🐱"], correct: [1]}, // Σωστό: Πάντα
-    {q: "2️⃣ Πόσα Toyota Yaris έχει αλλάξει ο μπαμπάς; 🤔", a: ["1 🚗", "2 🚙", "3 🏎️", "4 🚐"], correct: [2]}, // *** Άλλαξε το [2] αν το 3 δεν είναι η σωστή απάντηση. [0]=1, [1]=2 κτλ.
+    {q: "2️⃣ Πόσα Toyota Yaris έχει αλλάξει ο μπαμπάς; 🤔", a: ["1 🚗", "2 🚙", "3 🏎️", "4 🚐"], correct: [2]}, // *** Άλλαξε το [2] αν χρειάζεται (0 είναι το 1, 1 είναι το 2 κτλ)
     {q: "3️⃣ Τι βάζουμε το καλοκαίρι όταν έχει ήλιο για να βλέπουμε καλά; ☀️", a: ["Σκουφάκι 🧢", "Γυαλιά ηλίου 🕶️", "Κασκόλ 🧣", "Ομπρέλα ☔"], correct: [1]}, // Σωστό: Γυαλιά ηλίου
-    {q: "4️⃣ Ποια μέρα είναι η γιορτή σου; 🎉", a: ["23 Απριλίου 🌸", "15 Αυγούστου 🌊", "25 Δεκεμβρίου 🎄", "28 Οκτωβρίου 🇬🇷"], correct: [0]} // *** Άλλαξε ημερομηνίες και τον δείκτη [0] αν χρειάζεται.
+    {q: "4️⃣ Ποια μέρα είναι η γιορτή σου; 🎉", a: ["23 Απριλίου 🌸", "15 Αυγούστου 🌊", "25 Δεκεμβρίου 🎄", "28 Οκτωβρίου 🇬🇷"], correct: [0]} // *** Άλλαξε ημερομηνίες και δείκτη αν χρειάζεται.
 ];
 
 let current = 0;
@@ -562,13 +562,11 @@ function sendHug() {
     btnHug.disabled = true;
 }
 
-// Η ΝΕΑ ΣΥΝΑΡΤΗΣΗ ΓΙΑ ΤΟ SCANNER
+// --- ΝΕΟ 20 ΔΕΥΤΕΡΟΛΕΠΤΩΝ SCANNER ---
 function startSearch() {
-    // Ήχος έναρξης σκαναρίσματος
     playTone(300, "square", 0);
     playTone(400, "square", 0.2);
     
-    // Αλλάζουμε την οθόνη με τη μπάρα φόρτωσης
     document.getElementById("content-area").innerHTML = `
         <h3 style='color:#e91e63;'>Αναζήτηση Δώρου... 🔎</h3>
         <div class='lovebar-wrap' style='margin: 25px auto; width: 85%; background: rgba(0,0,0,0.1); border: 2px solid #8BC34A;'>
@@ -579,35 +577,40 @@ function startSearch() {
 
     let progress = 0;
     let searchTexts = [
-        "Σκανάρισμα κάτω από το κρεβάτι... 🛏️", 
-        "Ψάξιμο στο σαλόνι... 🛋️", 
-        "Εντοπισμός σήματος δώρου... 📡", 
+        "Έλεγχος κάτω από το κρεβάτι... 🛏️", 
+        "Ψάξιμο στην ντουλάπα... 👗", 
+        "Σκανάρισμα στο σαλόνι... 🛋️", 
+        "Μήπως είναι στο μπάνιο; 🛁",
+        "Εντοπισμός σήματος δώρου... 📡",
+        "Σχεδόν το βρήκα!... ⏳",
         "Βρέθηκε! 🎁"
     ];
     let searchBar = document.getElementById('search-bar');
     let searchText = document.getElementById('search-text');
 
+    // Interval στα 100ms * 200 φορές (+0.5 κάθε φορά) = 20.000ms = 20 δευτερόλεπτα
     let interval = setInterval(() => {
-        progress += 1; 
+        progress += 0.5; 
         searchBar.style.width = progress + "%";
         
-        // Αλλαγή κειμένων όσο γεμίζει η μπάρα
-        if (progress === 25) { searchText.innerHTML = searchTexts[0]; playTone(500, "sine", 0); }
-        if (progress === 50) { searchText.innerHTML = searchTexts[1]; playTone(500, "sine", 0); }
-        if (progress === 75) { searchText.innerHTML = searchTexts[2]; playTone(500, "sine", 0); }
+        // Αλλαγή κειμένων ανάλογα με το ποσοστό (πιο πολλά μηνύματα για τα 20 δευτερόλεπτα)
+        if (progress === 15) { searchText.innerHTML = searchTexts[0]; playTone(500, "sine", 0); }
+        if (progress === 30) { searchText.innerHTML = searchTexts[1]; playTone(500, "sine", 0); }
+        if (progress === 45) { searchText.innerHTML = searchTexts[2]; playTone(500, "sine", 0); }
+        if (progress === 60) { searchText.innerHTML = searchTexts[3]; playTone(500, "sine", 0); }
+        if (progress === 75) { searchText.innerHTML = searchTexts[4]; playTone(500, "sine", 0); }
+        if (progress === 90) { searchText.innerHTML = searchTexts[5]; playTone(500, "sine", 0); }
 
         if(progress >= 100) {
             clearInterval(interval);
-            searchText.innerHTML = searchTexts[3];
+            searchText.innerHTML = searchTexts[6];
             playTone(800, "sine", 0);
             playTone(1000, "sine", 0.2);
-            // Μικρή παύση πριν δείξει το μπαλκόνι
             setTimeout(showBalcony, 800); 
         }
-    }, 50); // 50ms * 100 = 5 δευτερόλεπτα συνολικά
+    }, 100); 
 }
 
-// Η ΤΕΛΙΚΗ ΟΘΟΝΗ ΜΕ ΤΟ ΜΠΑΛΚΟΝΙ
 function showBalcony() {
     document.getElementById("content-area").innerHTML = "<h2 style='color:#e91e63; margin-top:0;'>Βρέθηκε! 😍🎁</h2><p style='font-size:26px; font-weight:bold; line-height:1.4;'>Τρέξε γρήγορα στο <span style='color:#FF9800; font-size:32px; text-transform:uppercase;'>Μπαλκόνι</span><br> Εκεί σε περιμένει το δώρο σου! 🌺🌿🌈</p><p style='font-size:16px; color:#555; margin-top:20px;'>(Κάνε κλικ οπουδήποτε στην οθόνη για λίγη ακόμα μαγεία ✨)</p>";
     document.getElementById("title").innerHTML = "💖🎉";
